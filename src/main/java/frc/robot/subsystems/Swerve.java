@@ -9,21 +9,25 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.function.DoubleSupplier;
 
 //import edu.wpi.first.wpilibj.Filesystem;
 import swervelib.parser.SwerveParser;
+import swervelib.SwerveController;
 import swervelib.SwerveDrive;
-import swervelib.math.SwerveMath;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 
 public class Swerve extends SubsystemBase {
 
   private SwerveDrive swerveDrive; // create a swerve drive
+  private double maximumSpeed = Units.feetToMeters(4.5); // max speed is 4.5 feet per second
+  private Translation2d centerOfRotation = new Translation2d();
 
   public Swerve(File directory) {
-    double maximumSpeed = Units.feetToMeters(4.5); // max speed is 4.5 feet per second
     try {
       // File swerveJsonDirectory = new
       // File(Filesystem.getDeployDirectory(),"swerve"); Create a "Json directory
@@ -35,7 +39,66 @@ public class Swerve extends SubsystemBase {
     }
   }
 
-  public Command driveFieldOriented(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier headingX, DoubleSupplier headingY) {  //sample code supplied
+
+  public ChassisSpeeds getTargetSpeeds(double Xinput, double Yinput, double angle, double currentHeading, double maxspeed){
+    Xinput=Math.pow(Xinput, 3);
+    Yinput=Math.pow(Yinput, 3);
+    return swerveDrive.swerveController.getTargetSpeeds(Xinput, Yinput, angle, currentHeading, maxspeed);
+  }
+
+  public double getMaxSpeed() {
+    return maximumSpeed;
+}
+
+  public void driveRobot(Translation2d translation, double rotatation, boolean fieldRelativity, boolean isOpenLoop){
+    swerveDrive.drive(translation, rotatation, fieldRelativity, isOpenLoop);
+  }
+
+  public void setRotationCenter(Translation2d rotationCenter){
+  centerOfRotation=rotationCenter;
+}
+
+  public Translation2d getRotationCenter() {
+    return centerOfRotation;
+}
+
+  public boolean getHeadingCorrection(){
+    return swerveDrive.headingCorrection;
+  }
+
+  public void setHeadingCorrection(boolean headingCorrection){
+    swerveDrive.headingCorrection=headingCorrection;
+  }
+
+  public SwerveDriveKinematics getKinematics(){
+    return swerveDrive.kinematics;
+    }
+
+  public Pose2d getPose() {
+    return swerveDrive.getPose();
+    }
+
+  public void zeroGyro() {
+    swerveDrive.zeroGyro();
+}
+  public void OneMustImagineSisyphusHappy(){  //learn the legend of Sisyphus to understand the joke
+    swerveDrive.lockPose();
+  }
+
+  public Rotation2d getPitch(){
+    return swerveDrive.getPitch();
+  }
+
+  public void overrideMaxSpeed(double MaximumSpeed){
+    swerveDrive.setMaximumSpeed(MaximumSpeed);
+  }
+
+  public SwerveController getSwerveController() {
+        return swerveDrive.swerveController;
+    }
+
+
+  /*public Command driveFieldOriented(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier headingX, DoubleSupplier headingY) {  //sample code supplied
     swerveDrive.setHeadingCorrection(true); // "Normally you would want heading correction for this kind of control" - YAGSL devs
     return run(() -> { // Returns whatever "Run" is so that VScode doesn't cry
       Translation2d scaledInputs = SwerveMath
@@ -54,10 +117,11 @@ public class Swerve extends SubsystemBase {
       swerveDrive.drive(new Translation2d(translationX.getAsDouble() * swerveDrive.getMaximumVelocity(),
       translationY.getAsDouble() * swerveDrive.getMaximumVelocity()), angleRotation.getAsDouble()*swerveDrive.getMaximumAngularVelocity(),false,false);
     });
-    
-  }
+  }*/
+
+   
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    swerveDrive.updateOdometry();
   }
 }

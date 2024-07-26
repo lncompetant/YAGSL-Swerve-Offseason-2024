@@ -11,25 +11,25 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Swerve;
-import swervelib.SwerveController;
 
 public class TeleopSwerve extends Command {
   /** Creates a new Swerve. */
   Swerve swerve;
   DoubleSupplier velocityX;
   DoubleSupplier velocityY;
-  DoubleSupplier omega;  //some sort of variable used for math
-  DoubleSupplier throttle;
-  BooleanSupplier isFieldRelative;
+  DoubleSupplier omega;  //some sort of variable used for math (currently not in use)
+  DoubleSupplier throttle;  //some sort of variable used for math (currently not in use)
+  boolean isFieldRelative;
   boolean isOpenLoop;
-  SwerveController controller;
-  public TeleopSwerve(Swerve swerve, DoubleSupplier velocityX, DoubleSupplier velocityY, DoubleSupplier omega, DoubleSupplier throttle,BooleanSupplier isFieldRelative, boolean isOpenLoop,SwerveController controller) {
+  DoubleSupplier angularVelocity;
+  public TeleopSwerve(Swerve swerve, DoubleSupplier velocityX, DoubleSupplier velocityY, DoubleSupplier angularVelocity, boolean isFieldRelative, boolean isOpenLoop) { //Had to comment out Omega and Throttle.
     this.swerve=swerve;
     this.velocityX=velocityX;
     this.velocityY=velocityY;
-    this.omega=omega;
-    this.throttle=throttle;
+    this.angularVelocity=angularVelocity;
+    //this.throttle=throttle;
     this.isFieldRelative=isFieldRelative;
+    //this.omega=omega;
     this.isOpenLoop=isOpenLoop;
     addRequirements(swerve);
   }
@@ -44,14 +44,18 @@ public class TeleopSwerve extends Command {
   public void execute() {
     double modVelocityX=velocityX.getAsDouble();
     double modVelocityY=velocityY.getAsDouble();
+    double modAngVelocity=angularVelocity.getAsDouble();
     if(Math.abs(velocityX.getAsDouble())<0.2&&Math.abs(velocityY.getAsDouble())<0.2){
-      modVelocityX=0;
-      modVelocityY=0;
+      modVelocityX=0; //dead zone
+      modVelocityY=0; //dead zone
     }
-    double xSpeed = (modVelocityX *swerve.getMaxSpeed()*MathUtil.clamp(throttle.getAsDouble(), 0.1, 1));  //Map the X value of Joystick to a usable double
-    double ySpeed = (modVelocityY *swerve.getMaxSpeed()*MathUtil.clamp(throttle.getAsDouble(), 0.1, 1));  //Map the X value of Joystick to a usable double
-    double angVelocity = (Math.pow(MathUtil.applyDeadband(omega.getAsDouble(), 0.2), 3) * controller.config.maxAngularVelocity) * 0.5; //Map the X value of right Joystick to a usable double for turning
-    swerve.driveRobot(new Translation2d(xSpeed,ySpeed), angVelocity, isFieldRelative.getAsBoolean(), isOpenLoop);
+    if(Math.abs(angularVelocity.getAsDouble())<0.2){
+      modAngVelocity=0;
+    }
+    //double xSpeed = (modVelocityX *swerve.getMaxSpeed()*MathUtil.clamp(throttle.getAsDouble(), 0.1, 1));  //Map the X value of Joystick to a usable double
+    //double ySpeed = (modVelocityY *swerve.getMaxSpeed()*MathUtil.clamp(throttle.getAsDouble(), 0.1, 1));  //Map the X value of Joystick to a usable double
+    //double angVelocity = (Math.pow(MathUtil.applyDeadband(omega.getAsDouble(), 0.2), 3) * controller.config.maxAngularVelocity) * 0.5; //Map the X value of right Joystick to a usable double for turning
+    swerve.driveRobot(new Translation2d(modVelocityX,modVelocityY), modAngVelocity, isFieldRelative, isOpenLoop);
 
   }
 

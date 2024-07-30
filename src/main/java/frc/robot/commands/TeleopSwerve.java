@@ -22,15 +22,14 @@ public class TeleopSwerve extends Command {
   boolean isFieldRelative;
   boolean isOpenLoop;
   DoubleSupplier angularVelocity;
-  public TeleopSwerve(Swerve swerve, DoubleSupplier velocityX, DoubleSupplier velocityY, DoubleSupplier angularVelocity, boolean isFieldRelative, boolean isOpenLoop) { //Had to comment out Omega and Throttle.
-    this.swerve=swerve;
+  public TeleopSwerve(Swerve swerve, DoubleSupplier velocityX, DoubleSupplier velocityY, DoubleSupplier angularVelocity, BooleanSupplier isFieldRelative, BooleanSupplier isOpenLoop) { 
     this.velocityX=velocityX;
     this.velocityY=velocityY;
     this.angularVelocity=angularVelocity;
     //this.throttle=throttle;
-    this.isFieldRelative=isFieldRelative;
+    this.isFieldRelative=isFieldRelative.getAsBoolean();
     //this.omega=omega;
-    this.isOpenLoop=isOpenLoop;
+    this.isOpenLoop=isOpenLoop.getAsBoolean();
     addRequirements(swerve);
   }
 

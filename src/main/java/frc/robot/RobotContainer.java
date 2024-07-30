@@ -35,7 +35,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    Swerve.setDefaultCommand(new TeleopSwerve(drivebase, m_driverController.getLeftX(), m_driverController.getLeftY(), m_driverController.getRightX(), true, false);
+    drivebase.setDefaultCommand(new TeleopSwerve(drivebase, m_driverController.getLeftX(), m_driverController.getLeftY(), m_driverController.getRightX(), true, false));
     // Configure the trigger bindings
     configureBindings();
   }

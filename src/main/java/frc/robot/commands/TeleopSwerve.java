@@ -51,12 +51,18 @@ public class TeleopSwerve extends Command {
     if(Math.abs(angularVelocity.getAsDouble())<0.2){
       modAngVelocity=0;
     }
-    //double xSpeed = (modVelocityX *swerve.getMaxSpeed()*MathUtil.clamp(throttle.getAsDouble(), 0.1, 1));  //Map the X value of Joystick to a usable double
+    if(modAngVelocity!=0||modVelocityX!=0||modVelocityY!=0){
+      //double xSpeed = (modVelocityX *swerve.getMaxSpeed()*MathUtil.clamp(throttle.getAsDouble(), 0.1, 1));  //Map the X value of Joystick to a usable double
     //double ySpeed = (modVelocityY *swerve.getMaxSpeed()*MathUtil.clamp(throttle.getAsDouble(), 0.1, 1));  //Map the X value of Joystick to a usable double
     //double angVelocity = (Math.pow(MathUtil.applyDeadband(omega.getAsDouble(), 0.2), 3) * controller.config.maxAngularVelocity) * 0.5; //Map the X value of right Joystick to a usable double for turning
     swerve.driveRobot(new Translation2d(modVelocityX,modVelocityY), modAngVelocity, isFieldRelative, isOpenLoop);
+    }
+    else{
+      swerve.OneMustImagineSisyphusHappy();
+      }
+    }
+   
 
-  }
 
   // Called once the command ends or is interrupted.
   @Override

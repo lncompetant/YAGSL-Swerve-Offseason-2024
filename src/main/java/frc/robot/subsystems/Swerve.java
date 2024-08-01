@@ -80,7 +80,7 @@ public class Swerve extends SubsystemBase {
   public void zeroGyro() {
     swerveDrive.zeroGyro();
 }
-  public void OneMustImagineSisyphusHappy(){  //learn the legend of Sisyphus to understand the joke
+  public void OneMustImagineSisyphusHappy(){  //Context behind the naming convention: https://www.youtube.com/watch?v=J9elzJqlqfc
     swerveDrive.lockPose();
   }
 

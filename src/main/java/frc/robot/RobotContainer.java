@@ -35,7 +35,9 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    drivebase.setDefaultCommand(new TeleopSwerve(drivebase, ()-> m_driverController.getLeftX(), ()->m_driverController.getLeftY(),()-> m_driverController.getRightX(), ()->true, ()->false));
+    drivebase.setDefaultCommand(new TeleopSwerve(drivebase, ()-> m_driverController.getLeftX(), ()->m_driverController.getLeftY(),()-> m_driverController.getRightX(), m_driverController.rightTrigger(), ()->false)); //if you hold down the right trigger, you should be robot oriented.
+    //drivebase.setDefaultCommand(new TeleopSwerve(drivebase, ()-> m_driverController.getLeftX(), ()->m_driverController.getLeftY(),()-> m_driverController.getRightX(), ()-> false), ()->false)); //if you hold down the right trigger, you should be robot oriented.
+
     // Configure the trigger bindings
     configureBindings();
   }
@@ -53,10 +55,10 @@ public class RobotContainer {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     new Trigger(m_exampleSubsystem::exampleCondition)
         .onTrue(new ExampleCommand(m_exampleSubsystem));
+    
+    //m_driverController.rightTrigger().toggleOnTrue(new TeleopSwerve(drivebase, ()-> m_driverController.getLeftX(), ()->m_driverController.getLeftY(),()-> m_driverController.getRightX(), ()->false, ()->false));  //Back up swerve method
 
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+
   }
 
   /**

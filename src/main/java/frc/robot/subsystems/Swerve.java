@@ -49,9 +49,10 @@ public class Swerve extends SubsystemBase {
     return maximumSpeed;
 }
 
-  public void driveRobot(Translation2d translation, double rotatation, boolean fieldRelativity, boolean isOpenLoop){
-    swerveDrive.drive(translation, rotatation, fieldRelativity, isOpenLoop);
+  public void driveRobot(Translation2d translation, double rotatation, boolean fieldRelativity, boolean isOpenLoop, Translation2d centerOfRotation){  //theoretically can be used for robot and field oriented drive
+    swerveDrive.drive(translation, rotatation, fieldRelativity, isOpenLoop, centerOfRotation);
   }
+  
 
   public void setRotationCenter(Translation2d rotationCenter){
   centerOfRotation=rotationCenter;

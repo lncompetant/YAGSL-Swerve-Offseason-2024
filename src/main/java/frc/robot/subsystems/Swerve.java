@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.function.DoubleSupplier;
 
 //import edu.wpi.first.wpilibj.Filesystem;
 import swervelib.parser.SwerveParser;
@@ -39,11 +40,31 @@ public class Swerve extends SubsystemBase {
   }
 
 
-  public ChassisSpeeds getTargetSpeeds(double Xinput, double Yinput, double angle, double currentHeading, double maxspeed){
+  /*public ChassisSpeeds getTargetSpeeds(double Xinput, double Yinput, double angle, double currentHeading, double maxspeed){
     Xinput=Math.pow(Xinput, 3);
     Yinput=Math.pow(Yinput, 3);
     return swerveDrive.swerveController.getTargetSpeeds(Xinput, Yinput, angle, currentHeading, maxspeed);
+  }*/
+
+
+  public Pose2d getPose() {
+    return swerveDrive.getPose();
   }
+
+  public void resetOdometry(Pose2d initialHolonomicPose)
+  {
+    swerveDrive.resetOdometry(initialHolonomicPose);
+  }
+
+  public ChassisSpeeds getChassisSpeeds(){
+    return swerveDrive.getRobotVelocity();
+  }
+  
+  public void driveChassisSpeed(ChassisSpeeds chassisSpeed){
+    swerveDrive.drive(chassisSpeed);
+  }
+
+  
 
   public double getMaxSpeed() {
     return maximumSpeed;
@@ -74,9 +95,6 @@ public class Swerve extends SubsystemBase {
     return swerveDrive.kinematics;
     }
 
-  public Pose2d getPose() {
-    return swerveDrive.getPose();
-    }
 
   public void zeroGyro() {
     swerveDrive.zeroGyro();

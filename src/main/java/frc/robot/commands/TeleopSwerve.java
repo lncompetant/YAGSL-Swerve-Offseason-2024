@@ -7,7 +7,6 @@ package frc.robot.commands;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Swerve;
@@ -22,6 +21,8 @@ public class TeleopSwerve extends Command {
   boolean isFieldRelative;
   boolean isOpenLoop;
   DoubleSupplier angularVelocity;
+
+
   public TeleopSwerve(Swerve swerve, DoubleSupplier velocityX, DoubleSupplier velocityY, DoubleSupplier angularVelocity, BooleanSupplier isFieldRelative, BooleanSupplier isOpenLoop) { 
     this.velocityX=velocityX;
     this.velocityY=velocityY;

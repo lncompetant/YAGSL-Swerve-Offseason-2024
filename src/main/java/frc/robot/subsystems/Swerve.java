@@ -20,32 +20,34 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Filesystem;
 
 public class Swerve extends SubsystemBase {
 
   private SwerveDrive swerveDrive; // create a swerve drive
   private double maximumSpeed = Units.feetToMeters(4.5); // max speed is 4.5 feet per second
   private Translation2d centerOfRotation = new Translation2d();
+  private ChassisSpeeds chassisSpeed = new ChassisSpeeds();
+
 
   public Swerve(File directory) {
     try {
-      // File swerveJsonDirectory = new
-      // File(Filesystem.getDeployDirectory(),"swerve"); Create a "Json directory
-      // File" type to pass to the next line (This line is probably not needed
-      // anymore)
+      //File swerveJsonDirectory = new File(Filesystem.getDeployDirectory(),"swerve");
       swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed); //
     } catch (IOException e) {
       e.printStackTrace();
     }
   }
 
+  public ChassisSpeeds getTargetSpeeds(DoubleSupplier Xinput, DoubleSupplier Yinput, DoubleSupplier angle, double heading, double maxspeed){
+    //Xinput=Math.pow(Xinput, 3);
+    //Yinput=Math.pow(Yinput, 3);
+    return swerveDrive.swerveController.getTargetSpeeds(Xinput.getAsDouble(), Yinput.getAsDouble(), angle.getAsDouble(), heading, maxspeed);
+  }
 
-  /*public ChassisSpeeds getTargetSpeeds(double Xinput, double Yinput, double angle, double currentHeading, double maxspeed){
-    Xinput=Math.pow(Xinput, 3);
-    Yinput=Math.pow(Yinput, 3);
-    return swerveDrive.swerveController.getTargetSpeeds(Xinput, Yinput, angle, currentHeading, maxspeed);
-  }*/
-
+  //public ChassisSpeeds getTargetSpeeds(double xInput, double yInput, Rotation2d angle){
+    
+ // }
 
   public Pose2d getPose() {
     return swerveDrive.getPose();
@@ -140,6 +142,7 @@ public class Swerve extends SubsystemBase {
    
   @Override
   public void periodic() {
+    
     swerveDrive.updateOdometry();
   }
 }

@@ -28,10 +28,9 @@ public class TeleopSwerve extends Command {
     this.velocityX=velocityX;
     this.velocityY=velocityY;
     this.angularVelocity=angularVelocity;
-    //this.throttle=throttle;
     this.isFieldRelative=isFieldRelative.getAsBoolean();
-    //this.omega=omega;
     this.isOpenLoop=isOpenLoop.getAsBoolean();
+    this.swerve = swerve;
     addRequirements(swerve);
   }
 
@@ -46,17 +45,20 @@ public class TeleopSwerve extends Command {
     double modVelocityX=velocityX.getAsDouble();
     double modVelocityY=velocityY.getAsDouble();
     double modAngVelocity=angularVelocity.getAsDouble();
-    if(Math.abs(velocityX.getAsDouble())<0.2&&Math.abs(velocityY.getAsDouble())<0.2){
+    
+    //dead zone code.  If the raw reading is below 0.2, then floor the value that will be passed to the drive function.  Otherwise, pass to the drive function.
+    if(Math.abs(velocityX.getAsDouble())<0.2){
       modVelocityX=0; //dead zone
+    }
+    if(Math.abs(velocityY.getAsDouble())<0.2){
       modVelocityY=0; //dead zone
     }
     if(Math.abs(angularVelocity.getAsDouble())<0.2){
       modAngVelocity=0;
     }
+
+    //actully drive the robot.
     if(modAngVelocity!=0||modVelocityX!=0||modVelocityY!=0){
-      //double xSpeed = (modVelocityX *swerve.getMaxSpeed()*MathUtil.clamp(throttle.getAsDouble(), 0.1, 1));  //Map the X value of Joystick to a usable double
-    //double ySpeed = (modVelocityY *swerve.getMaxSpeed()*MathUtil.clamp(throttle.getAsDouble(), 0.1, 1));  //Map the X value of Joystick to a usable double
-    //double angVelocity = (Math.pow(MathUtil.applyDeadband(omega.getAsDouble(), 0.2), 3) * controller.config.maxAngularVelocity) * 0.5; //Map the X value of right Joystick to a usable double for turning
     swerve.driveRobot(new Translation2d(modVelocityX,modVelocityY), modAngVelocity, isFieldRelative, isOpenLoop,new Translation2d(0,0));
     }
     else{

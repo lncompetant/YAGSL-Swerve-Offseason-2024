@@ -24,6 +24,7 @@ public class TeleopSwerve extends Command {
 
 
   public TeleopSwerve(Swerve swerve, DoubleSupplier velocityX, DoubleSupplier velocityY, DoubleSupplier angularVelocity, BooleanSupplier isFieldRelative, BooleanSupplier isOpenLoop) { 
+    this.swerve = swerve;
     this.velocityX=velocityX;
     this.velocityY=velocityY;
     this.angularVelocity=angularVelocity;
